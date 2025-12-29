@@ -2,6 +2,19 @@
 
 Google Maps와 Firebase를 활용한 실시간 물리학 데이터 모니터링 시스템
 
+[![Open in Bolt.new](https://img.shields.io/badge/Open%20in-Bolt.new-00D9FF?style=for-the-badge&logo=stackblitz)](https://bolt.new)
+
+## 🚀 빠른 시작 (Bolt.new)
+
+**Bolt.new에서 바로 실행하기**: 이 프로젝트는 Bolt.new(StackBlitz)에서 브라우저만으로 바로 실행할 수 있습니다!
+
+1. [Bolt.new](https://bolt.new) 접속
+2. GitHub 저장소 URL 붙여넣기
+3. 환경 변수 설정 (Firebase, Google Maps, OpenWeather API 키)
+4. 즉시 실행!
+
+**자세한 Bolt.new 설정 방법**: [`BOLT_SETUP.md`](./BOLT_SETUP.md) 참조
+
 ## 개요
 
 Physics Dashboard는 전 세계의 다양한 물리학 데이터(지진, 날씨, 방사능 등)를 실시간으로 수집하고, Google Maps 상에 시각화하며, Firebase Firestore에 저장하는 웹 애플리케이션입니다.
@@ -26,9 +39,10 @@ Physics Dashboard는 전 세계의 다양한 물리학 데이터(지진, 날씨,
 - **방사능**: 시뮬레이션 데이터 (실제 API 연동 가능)
 
 ### 4. 자동/수동 동기화
-- **자동 동기화**: 매일 1회 자동으로 최신 데이터 수집
+- **브라우저 자동 동기화**: 대시보드에서 "자동 동기화" 체크박스 활성화 시 24시간마다 자동 실행
 - **수동 동기화**: 데이터 관리 페이지에서 즉시 동기화 가능
 - **API 테스트**: 각 데이터 소스별 API 테스트 기능
+- **동기화 로그**: 모든 동기화 작업 이력 저장 및 확인
 
 ### 5. 데이터베이스 설명서
 - 각 데이터베이스의 스키마 문서

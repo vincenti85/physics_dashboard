@@ -13,6 +13,8 @@ const Dashboard: React.FC = () => {
   const [activeView, setActiveView] = useState<'all' | 'earthquake' | 'weather' | 'radiation' | 'heatmap'>('all');
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [autoSync, setAutoSync] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
 
   useEffect(() => {
     loadData();
@@ -21,6 +23,17 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     updateMapMarkers();
   }, [earthquakes, weather, radiation, activeView]);
+
+  // Auto-sync feature - runs every 24 hours when enabled
+  useEffect(() => {
+    if (!autoSync) return;
+
+    const syncInterval = setInterval(() => {
+      handleSync();
+    }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
+
+    return () => clearInterval(syncInterval);
+  }, [autoSync]);
 
   const loadData = async () => {
     setLoading(true);
@@ -88,6 +101,7 @@ const Dashboard: React.FC = () => {
     try {
       await syncService.syncAllData();
       await loadData();
+      setLastSyncTime(new Date());
       alert('데이터 동기화가 완료되었습니다!');
     } catch (error) {
       console.error('Sync error:', error);
@@ -104,9 +118,14 @@ const Dashboard: React.FC = () => {
         <p style={{ margin: 0, color: '#666' }}>
           실시간 물리학 데이터 모니터링 시스템 - Google Maps & Firebase
         </p>
+        {lastSyncTime && (
+          <p style={{ margin: '5px 0 0 0', fontSize: '12px', color: '#999' }}>
+            마지막 동기화: {lastSyncTime.toLocaleString('ko-KR')}
+          </p>
+        )}
       </div>
 
-      <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+      <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
         <button
           onClick={() => setActiveView('all')}
           style={{
@@ -187,6 +206,15 @@ const Dashboard: React.FC = () => {
         >
           {syncing ? '동기화 중...' : '데이터 동기화'}
         </button>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={autoSync}
+            onChange={(e) => setAutoSync(e.target.checked)}
+            style={{ cursor: 'pointer' }}
+          />
+          <span style={{ fontSize: '14px' }}>자동 동기화 (24시간마다)</span>
+        </label>
       </div>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '20px' }}>

@@ -1,5 +1,9 @@
 # Physics Dashboard 설정 가이드
 
+> **💡 Bolt.new 사용자**: 브라우저에서 바로 실행하려면 [`BOLT_SETUP.md`](./BOLT_SETUP.md)를 참조하세요!
+
+---
+
 ## 1. Firebase 프로젝트 설정
 
 ### 1.1 Firebase 프로젝트 생성
@@ -106,52 +110,46 @@ USGS API는 별도 인증이 필요 없습니다.
 VITE_USGS_EARTHQUAKE_API=https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson
 ```
 
-## 5. 매일 자동 동기화 설정
+## 5. 데이터 동기화 설정
 
-### 5.1 Linux/Mac (Cron)
+### 5.1 브라우저 자동 동기화 (권장 - Bolt.new/개발 환경)
 
-```bash
-# crontab 편집
-crontab -e
+대시보드에서 "자동 동기화 (24시간마다)" 체크박스를 활성화하면, 브라우저가 열려있는 동안 24시간마다 자동으로 데이터를 동기화합니다.
 
-# 다음 줄 추가 (매일 오전 2시 실행)
-0 2 * * * cd /path/to/physics_dashboard && /usr/local/bin/node /path/to/physics_dashboard/scripts/sync-data.js >> /var/log/physics-sync.log 2>&1
-```
+**특징**:
+- 별도의 서버 설정 불필요
+- 브라우저가 닫히면 중지됨
+- Bolt.new에서 바로 사용 가능
 
-### 5.2 Windows (Task Scheduler)
+### 5.2 Linux/Mac (Cron) - 프로덕션 환경
 
-1. 작업 스케줄러 실행 (`taskschd.msc`)
-2. "작업 만들기" 선택
-3. **일반 탭**:
-   - 이름: Physics Dashboard Sync
-   - "사용자의 로그온 여부에 관계없이 실행" 선택
-4. **트리거 탭**:
-   - "새로 만들기" 클릭
-   - "매일" 선택
-   - 시작 시간 설정 (예: 02:00)
-5. **동작 탭**:
-   - "프로그램 시작" 선택
-   - 프로그램: `C:\Program Files\nodejs\node.exe`
-   - 인수: `C:\path\to\physics_dashboard\scripts\sync-data.js`
-   - 시작 위치: `C:\path\to\physics_dashboard`
-6. "확인" 클릭
+**참고**: 이 방법은 로컬 서버나 클라우드 서버 환경에서만 사용 가능합니다. Bolt.new에서는 5.1의 브라우저 자동 동기화를 사용하세요.
 
-### 5.3 Docker (선택사항)
+현재 버전에서는 서버 사이드 Cron job이 제거되었습니다. 프로덕션 환경에서 서버 사이드 자동 동기화가 필요한 경우, Firebase Cloud Functions 또는 별도의 백엔드 서비스를 구축하는 것을 권장합니다.
 
-```dockerfile
-# Dockerfile
-FROM node:18-alpine
+### 5.3 Windows (Task Scheduler) - 프로덕션 환경
 
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+현재 버전에서는 서버 사이드 스크립트가 제거되었습니다. Windows 환경에서도 브라우저 자동 동기화(5.1)를 사용하세요.
 
-# Cron 설정
-RUN apk add --no-cache dcron
-RUN echo "0 2 * * * cd /app && node scripts/sync-data.js" | crontab -
+### 5.4 Firebase Cloud Functions (프로덕션 권장)
 
-CMD ["crond", "-f"]
+프로덕션 환경에서 안정적인 자동 동기화를 원한다면 Firebase Cloud Functions를 사용하세요:
+
+```javascript
+// functions/index.js
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+admin.initializeApp();
+
+exports.dailySync = functions.pubsub
+  .schedule('0 2 * * *') // 매일 오전 2시 (UTC)
+  .timeZone('Asia/Seoul')
+  .onRun(async (context) => {
+    // 여기에 동기화 로직 추가
+    console.log('Daily sync started');
+    return null;
+  });
 ```
 
 ## 6. Firebase Firestore 보안 규칙
