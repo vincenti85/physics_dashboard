@@ -15,6 +15,30 @@ Google Maps와 Firebase를 활용한 실시간 물리학 데이터 모니터링 
 
 **자세한 Bolt.new 설정 방법**: [`BOLT_SETUP.md`](./BOLT_SETUP.md) 참조
 
+## 🌐 프로덕션 배포 (Vercel)
+
+**Vercel로 프로덕션 배포하기**: 이 프로젝트는 Vercel에서 몇 분 만에 배포할 수 있습니다!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvincenti85%2Fphysics_dashboard)
+
+### 배포 단계
+
+1. **Vercel 계정 연동**: GitHub 계정으로 로그인
+2. **프로젝트 가져오기**: `vincenti85/physics_dashboard` 저장소 선택
+3. **환경 변수 설정**: Firebase, Google Maps, OpenWeather API 키 입력 (총 10개)
+4. **배포 실행**: Deploy 버튼 클릭
+5. **API 키 도메인 설정**: Google Maps API 키에 Vercel 도메인 추가
+
+**완벽한 Vercel 배포 가이드**: [`VERCEL_DEPLOYMENT.md`](./VERCEL_DEPLOYMENT.md) 참조
+
+### 주요 기능
+
+- ✅ **자동 배포**: Git 푸시 시 자동 배포
+- ✅ **Edge CDN**: 전 세계 빠른 로딩
+- ✅ **HTTPS**: 자동 SSL 인증서
+- ✅ **커스텀 도메인**: 무료 도메인 연결
+- ✅ **환경 변수 관리**: 안전한 API 키 관리
+
 ## 개요
 
 Physics Dashboard는 전 세계의 다양한 물리학 데이터(지진, 날씨, 방사능 등)를 실시간으로 수집하고, Google Maps 상에 시각화하며, Firebase Firestore에 저장하는 웹 애플리케이션입니다.
