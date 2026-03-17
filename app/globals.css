@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --panel-bg: #0f0f1a;
+  --panel-border: #1e1e3a;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+}
+
+html, body {
+  background-color: #080810;
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Fix Leaflet map container in Next.js */
+.leaflet-container {
+  background: #0d1117 !important;
+  z-index: 0;
+}
+.leaflet-tile {
+  filter: brightness(0.85) saturate(0.8);
+}
