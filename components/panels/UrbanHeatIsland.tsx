@@ -31,7 +31,7 @@ export function UrbanHeatIsland() {
             className={`text-xs px-2 py-1 rounded ${showSurface ? 'bg-orange-600 text-white' : 'bg-white/5 text-slate-400'}`}
           >Surface Temp</button>
         </div>
-        <div className="flex-1 min-h-[200px]">
+        <div className="h-[218px]">
           {isLoading && <div className="text-slate-500 text-sm text-center py-8">Loading temperature data&hellip;</div>}
           {!isLoading && cities.length > 0 && (
             <Plot
@@ -50,17 +50,18 @@ export function UrbanHeatIsland() {
                 },
                 text: cities.map(c => `${(showSurface ? c.surfaceTemperature : c.temperature).toFixed(1)}°F`),
                 textposition: 'outside',
-                textfont: { color: '#94a3b8', size: 10 },
+                textfont: { color: '#94a3b8', size: 9 },
               }]}
               layout={{
                 paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                margin: { t: 20, b: 40, l: 40, r: 10 },
+                height: 218,
+                margin: { t: 18, b: 50, l: 38, r: 8 },
                 font: { color: '#94a3b8', size: 10 },
-                yaxis: { title: { text: '°F' }, gridcolor: '#1e293b', range: [50, Math.max(110, maxTemp + 10)] },
-                xaxis: { tickangle: -30 },
+                yaxis: { title: { text: '°F' }, gridcolor: '#1e293b', range: [50, Math.max(115, maxTemp + 12)] },
+                xaxis: { tickangle: -35, tickfont: { size: 9 } },
               }}
               config={{ displayModeBar: false, responsive: true }}
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '218px' }}
               useResizeHandler
             />
           )}

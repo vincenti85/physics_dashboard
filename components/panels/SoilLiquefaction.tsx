@@ -20,7 +20,7 @@ export function SoilLiquefaction() {
   return (
     <PanelCard title="Soil Liquefaction Risk" subtitle="USGS Seismicity · ISRIC SoilGrids" status={status} badge={`${recent.length} EQ 7-day`}>
       <div className="flex flex-col gap-2 h-full">
-        <div className="flex-1 min-h-[200px]">
+        <div className="h-[228px]">
           <Plot
             data={[
               {
@@ -56,18 +56,19 @@ export function SoilLiquefaction() {
             ]}
             layout={{
               paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-              margin: { t: 10, b: 30, l: 40, r: 10 },
+              height: 228,
+              margin: { t: 8, b: 28, l: 38, r: 8 },
               font: { color: '#94a3b8', size: 10 },
               xaxis: { title: { text: 'Longitude' }, range: [-88.5, -84.9], gridcolor: '#1e293b' },
               yaxis: { title: { text: 'Latitude' }, range: [30.2, 35], gridcolor: '#1e293b' },
-              legend: { orientation: 'h', y: -0.25, font: { size: 9 } },
+              legend: { orientation: 'h', y: -0.22, font: { size: 9 } },
             }}
             config={{ displayModeBar: false, responsive: true }}
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '228px' }}
             useResizeHandler
           />
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           {(['high', 'moderate', 'low'] as const).map(s => (
             <span key={s} className="flex items-center gap-1 text-xs text-slate-400">
               <span className="w-3 h-3 rounded-sm inline-block" style={{ background: SUSC_COLOR[s] }} />

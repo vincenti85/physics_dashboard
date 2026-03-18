@@ -31,33 +31,34 @@ export function GroundwaterTracker() {
             <div className={`text-xl font-bold ${deep > wells.length * 0.4 ? 'text-amber-400' : 'text-slate-200'}`}>{deep}</div>
           </div>
         </div>
-        <div className="flex-1 min-h-[180px]">
+        <div className="h-[200px]">
           {isLoading && <div className="text-slate-500 text-sm text-center py-8">Loading well data&hellip;</div>}
           {!isLoading && sorted.length > 0 && (
             <Plot
               data={[{
                 type: 'bar',
                 orientation: 'h',
-                x: sorted.slice(0, 12).map(w => w.depthToWater),
-                y: sorted.slice(0, 12).map(w => w.siteName.slice(0, 20)),
+                x: sorted.slice(0, 10).map(w => w.depthToWater),
+                y: sorted.slice(0, 10).map(w => w.siteName.slice(0, 18)),
                 marker: {
-                  color: sorted.slice(0, 12).map(w =>
+                  color: sorted.slice(0, 10).map(w =>
                     w.depthToWater < 15 ? '#22c55e' : w.depthToWater < 50 ? '#3b82f6' : '#f59e0b'
                   ),
                 },
-                text: sorted.slice(0, 12).map(w => `${w.depthToWater.toFixed(1)} ft`),
+                text: sorted.slice(0, 10).map(w => `${w.depthToWater.toFixed(1)} ft`),
                 textposition: 'outside',
                 textfont: { size: 9, color: '#94a3b8' },
               }]}
               layout={{
                 paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                margin: { t: 10, b: 30, l: 140, r: 50 },
+                height: 200,
+                margin: { t: 8, b: 28, l: 130, r: 48 },
                 font: { color: '#94a3b8', size: 9 },
                 xaxis: { title: { text: 'Depth (ft below surface)' }, gridcolor: '#1e293b' },
                 yaxis: { tickfont: { size: 8 } },
               }}
               config={{ displayModeBar: false, responsive: true }}
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '200px' }}
               useResizeHandler
             />
           )}

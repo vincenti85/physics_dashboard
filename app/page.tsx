@@ -33,23 +33,23 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* 10-Panel Grid */}
+      {/* 10-Panel Grid — h-full on every wrapper so PanelCard fills the row height */}
       <div className="p-3 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-[340px]">
-        {/* Row 1: Weather / Atmospheric (span wider for maps) */}
-        <div className="lg:col-span-2 xl:col-span-2 row-span-1"><TornadoRadar /></div>
-        <div className="row-span-1"><HurricaneSurge /></div>
-        <div className="row-span-1"><TVADamMonitor /></div>
+        {/* Row 1: Atmospheric */}
+        <div className="lg:col-span-2 xl:col-span-2 h-full"><TornadoRadar /></div>
+        <div className="h-full"><HurricaneSurge /></div>
+        <div className="h-full"><TVADamMonitor /></div>
 
         {/* Row 2: Grid / Subsurface */}
-        <div className="row-span-1"><PowerGridInertia /></div>
-        <div className="row-span-1"><SinkholePreditor /></div>
-        <div className="row-span-1"><SoilLiquefaction /></div>
-        <div className="row-span-1"><UrbanHeatIsland /></div>
+        <div className="h-full"><PowerGridInertia /></div>
+        <div className="h-full"><SinkholePreditor /></div>
+        <div className="h-full"><SoilLiquefaction /></div>
+        <div className="h-full"><UrbanHeatIsland /></div>
 
         {/* Row 3: Infrastructure / Lightning */}
-        <div className="row-span-1"><BridgeOscillation /></div>
-        <div className="row-span-1"><GroundwaterTracker /></div>
-        <div className="lg:col-span-2 xl:col-span-2 row-span-1"><LightningPredictor /></div>
+        <div className="h-full"><BridgeOscillation /></div>
+        <div className="h-full"><GroundwaterTracker /></div>
+        <div className="lg:col-span-2 xl:col-span-2 h-full"><LightningPredictor /></div>
       </div>
 
       <footer className="text-center text-xs text-slate-600 py-4 border-t border-white/5">

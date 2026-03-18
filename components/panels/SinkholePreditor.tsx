@@ -9,7 +9,6 @@ export function SinkholePreditor() {
   const { gwQuery } = useSinkholeData()
   const wells = gwQuery.data || []
 
-  // Compute risk: shallow water table (< 10 ft) = elevated risk
   const highRisk = wells.filter(w => w.depthToWater < 10).length
   const status = gwQuery.isError ? 'error' : gwQuery.isLoading ? 'loading' : highRisk > 3 ? 'warning' : 'nominal'
 
@@ -26,7 +25,7 @@ export function SinkholePreditor() {
             <div className={`text-xl font-bold ${highRisk > 3 ? 'text-amber-400' : 'text-slate-200'}`}>{highRisk}</div>
           </div>
         </div>
-        <div className="flex-1 min-h-[180px]">
+        <div className="h-[190px]">
           {wells.length > 0 && (
             <Plot
               data={[{
@@ -48,14 +47,15 @@ export function SinkholePreditor() {
               }]}
               layout={{
                 paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                margin: { t: 10, b: 30, l: 40, r: 10 },
+                height: 190,
+                margin: { t: 8, b: 28, l: 38, r: 60 },
                 font: { color: '#94a3b8', size: 10 },
-                xaxis: { title: { text: 'Longitude' }, gridcolor: '#1e293b' },
-                yaxis: { title: { text: 'Latitude' }, gridcolor: '#1e293b' },
+                xaxis: { title: { text: 'Lon' }, gridcolor: '#1e293b' },
+                yaxis: { title: { text: 'Lat' }, gridcolor: '#1e293b' },
                 showlegend: false,
               }}
               config={{ displayModeBar: false, responsive: true }}
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '190px' }}
               useResizeHandler
             />
           )}

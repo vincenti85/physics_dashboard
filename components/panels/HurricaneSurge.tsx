@@ -22,26 +22,26 @@ export function HurricaneSurge() {
 
   return (
     <PanelCard title="Hurricane Storm Surge" subtitle="NOAA CO-OPS Alabama Stations" status={isError ? 'error' : isLoading ? 'loading' : maxLevel === 'critical' ? 'critical' : maxLevel === 'warning' ? 'warning' : 'nominal'}>
-      <div className="flex flex-col gap-3 h-full">
+      <div className="flex flex-col gap-2 h-full">
         {isLoading && <div className="text-center text-slate-500 text-sm py-8">Fetching tide gauges&hellip;</div>}
         {isError && <div className="text-center text-red-400 text-sm py-8">NOAA CO-OPS unavailable</div>}
         {!isLoading && !isError && (
           <>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {stations.map(s => (
-                <div key={s.stationId} className="flex-1 min-w-[140px] bg-white/5 rounded-lg p-2">
-                  <div className="text-xs text-slate-400 truncate">{s.stationName}</div>
+                <div key={s.stationId} className="flex-1 bg-white/5 rounded-lg p-2">
+                  <div className="text-[10px] text-slate-400 truncate">{s.stationName}</div>
                   <div className="text-xl font-bold text-slate-100">{s.waterLevel.toFixed(2)}<span className="text-xs text-slate-500 ml-1">ft</span></div>
                   <StatusBadge
                     label={floodLevel(s) === 'critical' ? 'MAJOR FLOOD' : floodLevel(s) === 'warning' ? 'MINOR FLOOD' : 'NORMAL'}
                     variant={floodLevel(s) === 'critical' ? 'red' : floodLevel(s) === 'warning' ? 'amber' : 'green'}
                     size="xs"
                   />
-                  <div className="text-xs text-slate-500 mt-0.5">{s.trend === 'rising' ? '↑' : s.trend === 'falling' ? '↓' : '→'} {s.trend}</div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">{s.trend === 'rising' ? '↑' : s.trend === 'falling' ? '↓' : '→'} {s.trend}</div>
                 </div>
               ))}
             </div>
-            <div className="flex-1 min-h-[140px]">
+            <div className="h-[160px]">
               <Plot
                 data={[{
                   type: 'bar',
@@ -52,14 +52,15 @@ export function HurricaneSurge() {
                 }]}
                 layout={{
                   paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                  margin: { t: 10, b: 40, l: 40, r: 10 },
+                  height: 160,
+                  margin: { t: 8, b: 36, l: 38, r: 8 },
                   font: { color: '#94a3b8', size: 11 },
                   xaxis: { tickfont: { size: 10 } },
                   yaxis: { title: { text: 'ft MLLW' }, gridcolor: '#1e293b' },
                   showlegend: false,
                 }}
                 config={{ displayModeBar: false, responsive: true }}
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '160px' }}
                 useResizeHandler
               />
             </div>
