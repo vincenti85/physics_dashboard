@@ -4,7 +4,10 @@ import { useLightning } from '@/hooks/useLightning'
 import { PanelCard } from '@/components/ui/PanelCard'
 import { AlertBanner } from '@/components/ui/AlertBanner'
 
-const LightningMap = dynamic(() => import('@/components/maps/LightningMap'), { ssr: false, loading: () => <div className="h-full bg-slate-900 rounded animate-pulse" /> })
+const LightningMap = dynamic(() => import('@/components/maps/LightningMap'), {
+  ssr: false,
+  loading: () => <div className="h-full bg-slate-900 rounded animate-pulse" />,
+})
 
 export function LightningPredictor() {
   const { outlookQuery, alertQuery } = useLightning()
@@ -18,10 +21,11 @@ export function LightningPredictor() {
     <PanelCard title="Lightning Strike Predictor" subtitle="SPC Outlooks · NWS Severe Alerts" status={status} badge={alerts.length ? `${alerts.length} ACTIVE` : 'CLEAR'}>
       <div className="flex flex-col gap-2 h-full">
         <AlertBanner alerts={alerts.map(a => ({ id: a.id, headline: a.headline, severity: a.severity, expires: a.expires }))} />
-        <div className="flex-1 min-h-[200px] rounded-lg overflow-hidden">
+        {/* Explicit pixel height keeps the Leaflet map fully visible */}
+        <div className="h-[230px] rounded-lg overflow-hidden">
           <LightningMap outlooks={outlooks} />
         </div>
-        <div className="text-xs text-slate-500 flex justify-between">
+        <div className="text-xs text-slate-500 flex justify-between mt-auto">
           <span>SPC Day 1–3 Convective Outlooks</span>
           <span>{outlooks.length} outlook zones</span>
         </div>

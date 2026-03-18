@@ -26,12 +26,11 @@ const STATUS_DOT = {
   error: 'bg-red-700',
 }
 
-export function PanelCard({ title, subtitle, status = 'loading', badge, children, className, fullHeight }: PanelCardProps) {
+export function PanelCard({ title, subtitle, status = 'loading', badge, children, className }: PanelCardProps) {
   return (
     <div className={clsx(
-      'rounded-xl border bg-[#0f0f1a] shadow-lg flex flex-col overflow-hidden',
+      'rounded-xl border bg-[#0f0f1a] shadow-lg flex flex-col overflow-hidden h-full',
       STATUS_STYLES[status],
-      fullHeight && 'h-full',
       className
     )}>
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
