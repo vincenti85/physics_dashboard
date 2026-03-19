@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { EarthquakeData } from '../types';
 
-const USGS_API_URL = import.meta.env.VITE_USGS_EARTHQUAKE_API;
+const USGS_API_URL = import.meta.env.VITE_USGS_EARTHQUAKE_API ||
+  'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';
 
 export class EarthquakeAPI {
   async fetchRecentEarthquakes(): Promise<EarthquakeData[]> {

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { WeatherData } from '../types';
 
-const WEATHER_API_URL = import.meta.env.VITE_OPENWEATHER_API_URL;
+const WEATHER_API_URL = import.meta.env.VITE_OPENWEATHER_API_URL ||
+  'https://api.openweathermap.org/data/2.5/weather';
 const WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
 export class WeatherAPI {
@@ -17,6 +18,9 @@ export class WeatherAPI {
   ];
 
   async fetchWeatherForCity(city: string, lat: number, lon: number): Promise<WeatherData> {
+    if (!WEATHER_API_KEY) {
+      throw new Error('OpenWeather API key is not configured. Set VITE_OPENWEATHER_API_KEY in your .env file.');
+    }
     try {
       const response = await axios.get(WEATHER_API_URL, {
         params: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import GoogleMap from '../components/GoogleMap';
 import HeatMap from '../components/HeatMap';
 import { firebaseService } from '../services/firebaseService';
@@ -16,26 +16,7 @@ const Dashboard: React.FC = () => {
   const [autoSync, setAutoSync] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    updateMapMarkers();
-  }, [earthquakes, weather, radiation, activeView]);
-
-  // Auto-sync feature - runs every 24 hours when enabled
-  useEffect(() => {
-    if (!autoSync) return;
-
-    const syncInterval = setInterval(() => {
-      handleSync();
-    }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
-
-    return () => clearInterval(syncInterval);
-  }, [autoSync]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [eqData, weatherData, radData] = await Promise.all([
@@ -52,9 +33,24 @@ const Dashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateMapMarkers = () => {
+  const handleSync = useCallback(async () => {
+    setSyncing(true);
+    try {
+      await syncService.syncAllData();
+      await loadData();
+      setLastSyncTime(new Date());
+      alert('데이터 동기화가 완료되었습니다!');
+    } catch (error) {
+      console.error('Sync error:', error);
+      alert('데이터 동기화 중 오류가 발생했습니다.');
+    } finally {
+      setSyncing(false);
+    }
+  }, [loadData]);
+
+  const updateMapMarkers = useCallback(() => {
     const markers: MapMarker[] = [];
 
     if (activeView === 'all' || activeView === 'earthquake') {
@@ -94,22 +90,26 @@ const Dashboard: React.FC = () => {
     }
 
     setMapMarkers(markers);
-  };
+  }, [earthquakes, weather, radiation, activeView]);
 
-  const handleSync = async () => {
-    setSyncing(true);
-    try {
-      await syncService.syncAllData();
-      await loadData();
-      setLastSyncTime(new Date());
-      alert('데이터 동기화가 완료되었습니다!');
-    } catch (error) {
-      console.error('Sync error:', error);
-      alert('데이터 동기화 중 오류가 발생했습니다.');
-    } finally {
-      setSyncing(false);
-    }
-  };
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  useEffect(() => {
+    updateMapMarkers();
+  }, [updateMapMarkers]);
+
+  // Auto-sync feature - runs every 24 hours when enabled
+  useEffect(() => {
+    if (!autoSync) return;
+
+    const syncInterval = setInterval(() => {
+      handleSync();
+    }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
+
+    return () => clearInterval(syncInterval);
+  }, [autoSync, handleSync]);
 
   return (
     <div style={{ padding: '20px' }}>

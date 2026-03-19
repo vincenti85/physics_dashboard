@@ -12,7 +12,8 @@ export class SyncService {
       let successCount = 0;
       for (const eq of earthquakes) {
         try {
-          await firebaseService.addEarthquake(eq);
+          const { id: _id, ...eqData } = eq;
+          await firebaseService.addEarthquake(eqData);
           successCount++;
         } catch (error) {
           console.error(`Failed to save earthquake ${eq.id}:`, error);
