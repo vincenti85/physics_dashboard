@@ -59,7 +59,7 @@ export class WeatherAPI {
       return await Promise.all(weatherPromises);
     } catch (error) {
       console.error('Error fetching weather data for major cities:', error);
-      return [];
+      throw error;
     }
   }
 

@@ -48,7 +48,8 @@ export class SyncService {
       let successCount = 0;
       for (const weather of weatherData) {
         try {
-          await firebaseService.addWeatherData(weather);
+          const { id: _id, ...weatherData } = weather;
+          await firebaseService.addWeatherData(weatherData);
           successCount++;
         } catch (error) {
           console.error(`Failed to save weather data for ${weather.city}:`, error);
@@ -83,7 +84,8 @@ export class SyncService {
       let successCount = 0;
       for (const radiation of radiationData) {
         try {
-          await firebaseService.addRadiationData(radiation);
+          const { id: _id, ...radiationData } = radiation;
+          await firebaseService.addRadiationData(radiationData);
           successCount++;
         } catch (error) {
           console.error(`Failed to save radiation data for ${radiation.location}:`, error);
