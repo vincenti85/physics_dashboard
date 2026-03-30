@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Public dashboard collections - read-only for all users
+    // Writes are denied; data is ingested through Vercel API only
+    match /earthquakes/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /weather/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /radiation/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Internal sync logs - no client access
+    match /sync_logs/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Deny all access to any other collection by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

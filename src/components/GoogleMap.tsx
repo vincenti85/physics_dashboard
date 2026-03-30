@@ -2,6 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { MapMarker } from '../types';
 
+// @SECURITY A03 - XSS prevention for InfoWindow HTML injection
+const sanitizeHtml = (value: unknown): string => {
+  const str = String(value ?? '');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
 interface GoogleMapProps {
   markers: MapMarker[];
   center?: google.maps.LatLngLiteral;
@@ -71,9 +82,9 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
 
   const getMarkerIcon = (type: string): google.maps.Icon => {
     const icons: Record<string, string> = {
-      earthquake: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-      weather: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-      radiation: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+      earthquake: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+      weather: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+      radiation: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
     };
 
     return {
@@ -89,32 +100,32 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
       return `
         <div style="padding: 10px; max-width: 250px;">
           <h3 style="margin: 0 0 10px 0; color: #d32f2f;">지진 정보</h3>
-          <p><strong>위치:</strong> ${data.location}</p>
-          <p><strong>규모:</strong> M${data.magnitude}</p>
-          <p><strong>깊이:</strong> ${data.depth.toFixed(1)} km</p>
-          <p><strong>시간:</strong> ${new Date(data.timestamp).toLocaleString('ko-KR')}</p>
+          <p><strong>위치:</strong> ${sanitizeHtml(data.location)}</p>
+          <p><strong>규모:</strong> M${sanitizeHtml(data.magnitude)}</p>
+          <p><strong>깊이:</strong> ${sanitizeHtml(data.depth.toFixed(1))} km</p>
+          <p><strong>시간:</strong> ${sanitizeHtml(new Date(data.timestamp).toLocaleString('ko-KR'))}</p>
         </div>
       `;
     } else if (type === 'weather' && 'temperature' in data) {
       return `
         <div style="padding: 10px; max-width: 250px;">
           <h3 style="margin: 0 0 10px 0; color: #1976d2;">날씨 정보</h3>
-          <p><strong>도시:</strong> ${data.city}</p>
-          <p><strong>온도:</strong> ${data.temperature.toFixed(1)}°C</p>
-          <p><strong>습도:</strong> ${data.humidity}%</p>
-          <p><strong>기압:</strong> ${data.pressure} hPa</p>
-          <p><strong>풍속:</strong> ${data.windSpeed.toFixed(1)} m/s</p>
-          <p><strong>설명:</strong> ${data.description}</p>
+          <p><strong>도시:</strong> ${sanitizeHtml(data.city)}</p>
+          <p><strong>온도:</strong> ${sanitizeHtml(data.temperature.toFixed(1))}&deg;C</p>
+          <p><strong>습도:</strong> ${sanitizeHtml(data.humidity)}%</p>
+          <p><strong>기압:</strong> ${sanitizeHtml(data.pressure)} hPa</p>
+          <p><strong>풍속:</strong> ${sanitizeHtml(data.windSpeed.toFixed(1))} m/s</p>
+          <p><strong>설명:</strong> ${sanitizeHtml(data.description)}</p>
         </div>
       `;
     } else if (type === 'radiation' && 'value' in data) {
       return `
         <div style="padding: 10px; max-width: 250px;">
           <h3 style="margin: 0 0 10px 0; color: #f57c00;">방사능 정보</h3>
-          <p><strong>위치:</strong> ${data.location}</p>
-          <p><strong>측정값:</strong> ${data.value} ${data.unit}</p>
-          <p><strong>출처:</strong> ${data.source}</p>
-          <p><strong>측정 시간:</strong> ${new Date(data.timestamp).toLocaleString('ko-KR')}</p>
+          <p><strong>위치:</strong> ${sanitizeHtml(data.location)}</p>
+          <p><strong>측정값:</strong> ${sanitizeHtml(data.value)} ${sanitizeHtml(data.unit)}</p>
+          <p><strong>출처:</strong> ${sanitizeHtml(data.source)}</p>
+          <p><strong>측정 시간:</strong> ${sanitizeHtml(new Date(data.timestamp).toLocaleString('ko-KR'))}</p>
         </div>
       `;
     }
