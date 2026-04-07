@@ -53,7 +53,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       environment: {
         allVariablesConfigured: allEnvVarsPresent,
-        variables: requiredEnvVars,
         nodeEnv: process.env.NODE_ENV,
         vercelEnv: process.env.VERCEL_ENV
       },
