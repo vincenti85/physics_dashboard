@@ -14,14 +14,14 @@ function floodLevel(r: TideReading): 'critical' | 'warning' | 'nominal' {
 }
 
 export function HurricaneSurge() {
-  const { data: stations = [], isLoading, isError } = useStormSurge()
+  const { data: stations = [], isLoading, isError, dataUpdatedAt } = useStormSurge()
   const maxLevel = floodLevel(stations.reduce((a, b) =>
     (b.waterLevel / b.minorFloodThreshold) > (a.waterLevel / a.minorFloodThreshold) ? b : a,
     stations[0] || { waterLevel: 0, minorFloodThreshold: 1, majorFloodThreshold: 2, moderateFloodThreshold: 1.5 } as TideReading
   ))
 
   return (
-    <PanelCard title="Hurricane Storm Surge" subtitle="NOAA CO-OPS Alabama Stations" status={isError ? 'error' : isLoading ? 'loading' : maxLevel === 'critical' ? 'critical' : maxLevel === 'warning' ? 'warning' : 'nominal'}>
+    <PanelCard title="Hurricane Storm Surge" subtitle="NOAA CO-OPS Alabama Stations" status={isError ? 'error' : isLoading ? 'loading' : maxLevel === 'critical' ? 'critical' : maxLevel === 'warning' ? 'warning' : 'nominal'} lastUpdated={dataUpdatedAt}>
       <div className="flex flex-col gap-2 h-full">
         {isLoading && <div className="text-center text-slate-500 text-sm py-8">Fetching tide gauges&hellip;</div>}
         {isError && <div className="text-center text-red-400 text-sm py-8">NOAA CO-OPS unavailable</div>}

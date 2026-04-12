@@ -16,21 +16,19 @@ const UrbanHeatIsland    = dynamic(() => import('@/components/panels/UrbanHeatIs
 const BridgeOscillation  = dynamic(() => import('@/components/panels/BridgeOscillation').then(m => ({ default: m.BridgeOscillation })), { ssr: false })
 const GroundwaterTracker = dynamic(() => import('@/components/panels/GroundwaterTracker').then(m => ({ default: m.GroundwaterTracker })), { ssr: false })
 const LightningPredictor = dynamic(() => import('@/components/panels/LightningPredictor').then(m => ({ default: m.LightningPredictor })), { ssr: false })
+const LiveClock = dynamic(() => import('@/components/ui/LiveClock').then(m => ({ default: m.LiveClock })), { ssr: false })
 
 export default function DashboardPage() {
-  const now = new Date()
   return (
     <main className="min-h-screen bg-[#080810] text-slate-200">
       {/* Header */}
       <header className="border-b border-white/5 bg-[#0a0a18] px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur">
         <div className="flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
+          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           <h1 className="text-base font-bold tracking-wide text-slate-100">Alabama Natural Disaster Monitor</h1>
           <span className="hidden sm:inline text-xs text-slate-500 font-mono">10-PANEL · LIVE</span>
         </div>
-        <div className="text-xs text-slate-500 font-mono">
-          {now.toUTCString().replace(' GMT', ' UTC')}
-        </div>
+        <LiveClock />
       </header>
 
       {/* 10-Panel Grid — h-full on every wrapper so PanelCard fills the row height */}

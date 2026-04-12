@@ -18,7 +18,7 @@ export function LightningPredictor() {
   const status = alertQuery.isError ? 'error' : alertQuery.isLoading ? 'loading' : severe.length > 0 ? 'critical' : alerts.length > 0 ? 'warning' : 'nominal'
 
   return (
-    <PanelCard title="Lightning Strike Predictor" subtitle="SPC Outlooks · NWS Severe Alerts" status={status} badge={alerts.length ? `${alerts.length} ACTIVE` : 'CLEAR'}>
+    <PanelCard title="Lightning Strike Predictor" subtitle="SPC Outlooks · NWS Severe Alerts" status={status} badge={alerts.length ? `${alerts.length} ACTIVE` : 'CLEAR'} lastUpdated={Math.max(outlookQuery.dataUpdatedAt, alertQuery.dataUpdatedAt)}>
       <div className="flex flex-col gap-2 h-full">
         <AlertBanner alerts={alerts.map(a => ({ id: a.id, headline: a.headline, severity: a.severity, expires: a.expires }))} />
         {/* Explicit pixel height keeps the Leaflet map fully visible */}
