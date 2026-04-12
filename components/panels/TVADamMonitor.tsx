@@ -20,12 +20,12 @@ function pctOfFloodStage(g: DamGauge) {
 }
 
 export function TVADamMonitor() {
-  const { data: gauges = [], isLoading, isError } = useDamWater()
+  const { data: gauges = [], isLoading, isError, dataUpdatedAt } = useDamWater()
   const worst = gauges.some(g => damStatus(g) === 'critical') ? 'critical'
     : gauges.some(g => damStatus(g) === 'warning') ? 'warning' : 'nominal'
 
   return (
-    <PanelCard title="TVA Dam Water Monitor" subtitle="USGS Gauges · Wheeler · Wilson · Guntersville" status={isError ? 'error' : isLoading ? 'loading' : worst}>
+    <PanelCard title="TVA Dam Water Monitor" subtitle="USGS Gauges · Wheeler · Wilson · Guntersville" status={isError ? 'error' : isLoading ? 'loading' : worst} lastUpdated={dataUpdatedAt}>
       <div className="flex flex-col gap-2 h-full">
         {isLoading && <div className="text-slate-500 text-sm text-center py-8">Loading USGS gauges&hellip;</div>}
         {isError && <div className="text-red-400 text-sm text-center py-8">USGS unavailable</div>}

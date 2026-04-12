@@ -6,7 +6,7 @@ import { PanelCard } from '@/components/ui/PanelCard'
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export function GroundwaterTracker() {
-  const { data: wells = [], isLoading, isError } = useGroundwater()
+  const { data: wells = [], isLoading, isError, dataUpdatedAt } = useGroundwater()
 
   const shallow = wells.filter(w => w.depthToWater < 15).length
   const deep = wells.filter(w => w.depthToWater > 50).length
@@ -15,7 +15,7 @@ export function GroundwaterTracker() {
   const sorted = [...wells].sort((a, b) => a.depthToWater - b.depthToWater)
 
   return (
-    <PanelCard title="Groundwater Depletion" subtitle="USGS NWIS · Alabama Aquifers" status={status} badge={`${wells.length} active wells`}>
+    <PanelCard title="Groundwater Depletion" subtitle="USGS NWIS · Alabama Aquifers" status={status} badge={`${wells.length} active wells`} lastUpdated={dataUpdatedAt}>
       <div className="flex flex-col gap-2 h-full">
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="bg-white/5 rounded p-2">

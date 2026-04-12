@@ -6,14 +6,14 @@ import { PanelCard } from '@/components/ui/PanelCard'
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export function SinkholePreditor() {
-  const { gwQuery } = useSinkholeData()
+  const { gwQuery, precipQuery } = useSinkholeData()
   const wells = gwQuery.data || []
 
   const highRisk = wells.filter(w => w.depthToWater < 10).length
   const status = gwQuery.isError ? 'error' : gwQuery.isLoading ? 'loading' : highRisk > 3 ? 'warning' : 'nominal'
 
   return (
-    <PanelCard title="Sinkhole Predictor" subtitle="USGS GW Depth · NWS Precip · Karst Zones" status={status} badge={highRisk > 0 ? `${highRisk} HIGH-RISK SITES` : undefined}>
+    <PanelCard title="Sinkhole Predictor" subtitle="USGS GW Depth · NWS Precip · Karst Zones" status={status} badge={highRisk > 0 ? `${highRisk} HIGH-RISK SITES` : undefined} lastUpdated={Math.max(gwQuery.dataUpdatedAt, precipQuery.dataUpdatedAt)}>
       <div className="flex flex-col gap-2 h-full">
         <div className="grid grid-cols-2 gap-2 text-center">
           <div className="bg-white/5 rounded-lg p-2">

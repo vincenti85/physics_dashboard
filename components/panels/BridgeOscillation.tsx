@@ -8,7 +8,7 @@ const RISK_COLOR: Record<string, 'red' | 'amber' | 'green' | 'slate'> = {
 }
 
 export function BridgeOscillation() {
-  const { data: bridges = [], isLoading, isError } = useBridgeOscillation()
+  const { data: bridges = [], isLoading, isError, dataUpdatedAt } = useBridgeOscillation()
 
   const critical = bridges.filter(b => b.oscillationRisk === 'critical').length
   const high = bridges.filter(b => b.oscillationRisk === 'high').length
@@ -20,7 +20,7 @@ export function BridgeOscillation() {
   })
 
   return (
-    <PanelCard title="Bridge Oscillation Risk" subtitle="ALDOT GIS · NBI · NWS Wind" status={status} badge={critical > 0 ? `${critical} CRITICAL` : `${high} HIGH RISK`}>
+    <PanelCard title="Bridge Oscillation Risk" subtitle="ALDOT GIS · NBI · NWS Wind" status={status} badge={critical > 0 ? `${critical} CRITICAL` : `${high} HIGH RISK`} lastUpdated={dataUpdatedAt}>
       <div className="flex flex-col gap-2 h-full">
         <div className="grid grid-cols-4 gap-1 text-center">
           {(['critical', 'high', 'moderate', 'low'] as const).map(r => (

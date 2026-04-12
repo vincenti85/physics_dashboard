@@ -7,7 +7,7 @@ import { StatusBadge } from '@/components/ui/StatusBadge'
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export function PowerGridInertia() {
-  const { data: response, isLoading, isError } = useGridInertia()
+  const { data: response, isLoading, isError, dataUpdatedAt } = useGridInertia()
   const timeline = response?.data || []
   const latest = timeline[timeline.length - 1]
 
@@ -22,6 +22,7 @@ export function PowerGridInertia() {
       subtitle="SOCO Balancing Authority · EIA v2"
       status={status}
       badge={response?.demo ? 'DEMO DATA' : latest ? `${latest.inertiaIndex.toFixed(0)}% sync` : undefined}
+      lastUpdated={dataUpdatedAt}
     >
       <div className="flex flex-col gap-2 h-full">
         {isLoading && <div className="text-slate-500 text-sm text-center py-8">Loading EIA generation mix&hellip;</div>}

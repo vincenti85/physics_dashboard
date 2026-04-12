@@ -7,7 +7,7 @@ import { useState } from 'react'
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export function UrbanHeatIsland() {
-  const { data: cities = [], isLoading, isError } = useHeatIsland()
+  const { data: cities = [], isLoading, isError, dataUpdatedAt } = useHeatIsland()
   const [showSurface, setShowSurface] = useState(false)
 
   const maxTemp = Math.max(...cities.map(c => c.temperature), 0)
@@ -19,6 +19,7 @@ export function UrbanHeatIsland() {
       subtitle="Open-Meteo · Alabama Cities"
       status={status}
       badge={maxTemp > 0 ? `${maxTemp.toFixed(0)}°F max` : undefined}
+      lastUpdated={dataUpdatedAt}
     >
       <div className="flex flex-col gap-2 h-full">
         <div className="flex items-center gap-2">

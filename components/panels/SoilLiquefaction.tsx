@@ -18,7 +18,7 @@ export function SoilLiquefaction() {
   const status = eqQuery.isError ? 'error' : eqQuery.isLoading ? 'loading' : recent.length > 0 ? 'warning' : 'nominal'
 
   return (
-    <PanelCard title="Soil Liquefaction Risk" subtitle="USGS Seismicity · ISRIC SoilGrids" status={status} badge={`${recent.length} EQ 7-day`}>
+    <PanelCard title="Soil Liquefaction Risk" subtitle="USGS Seismicity · ISRIC SoilGrids" status={status} badge={`${recent.length} EQ 7-day`} lastUpdated={Math.max(eqQuery.dataUpdatedAt, soilQuery.dataUpdatedAt)}>
       <div className="flex flex-col gap-2 h-full">
         <div className="h-[228px]">
           <Plot

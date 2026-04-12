@@ -5,6 +5,7 @@ interface PanelCardProps {
   subtitle?: string
   status?: 'nominal' | 'warning' | 'critical' | 'loading' | 'error'
   badge?: string
+  lastUpdated?: number
   children: React.ReactNode
   className?: string
   fullHeight?: boolean
@@ -26,7 +27,16 @@ const STATUS_DOT = {
   error: 'bg-red-700',
 }
 
-export function PanelCard({ title, subtitle, status = 'loading', badge, children, className }: PanelCardProps) {
+function formatUpdatedAt(ts: number): string {
+  const d = new Date(ts)
+  const now = Date.now()
+  const diffSec = Math.floor((now - ts) / 1000)
+  if (diffSec < 60) return `${diffSec}s ago`
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`
+  return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' }) + ' UTC'
+}
+
+export function PanelCard({ title, subtitle, status = 'loading', badge, lastUpdated, children, className }: PanelCardProps) {
   return (
     <div className={clsx(
       'rounded-xl border bg-[#0f0f1a] shadow-lg flex flex-col overflow-hidden h-full',
@@ -39,11 +49,18 @@ export function PanelCard({ title, subtitle, status = 'loading', badge, children
           <span className="text-sm font-semibold text-slate-200 truncate">{title}</span>
           {subtitle && <span className="text-xs text-slate-500 truncate hidden sm:block">· {subtitle}</span>}
         </div>
-        {badge && (
-          <span className="text-xs font-mono bg-white/5 text-slate-400 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
-            {badge}
-          </span>
-        )}
+        <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+          {lastUpdated && lastUpdated > 0 && (
+            <span className="text-[10px] font-mono text-slate-600" title={new Date(lastUpdated).toISOString()}>
+              {formatUpdatedAt(lastUpdated)}
+            </span>
+          )}
+          {badge && (
+            <span className="text-xs font-mono bg-white/5 text-slate-400 px-2 py-0.5 rounded-full">
+              {badge}
+            </span>
+          )}
+        </div>
       </div>
       <div className="flex-1 min-h-0 p-3">{children}</div>
     </div>
